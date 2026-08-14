@@ -50,6 +50,8 @@ export function Signature() {
   );
 }
 
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+
 function Tick({
   index,
   total,
@@ -57,19 +59,17 @@ function Tick({
 }: {
   index: number;
   total: number;
-  progress: ReturnType<typeof useSpring>;
+  progress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
   const seg = 1 / total;
-  const width = useTransform(
-    progress,
-    [index * seg - 0.02, index * seg + 0.02, (index + 1) * seg - 0.02, (index + 1) * seg + 0.02],
-    [10, 54, 54, 10],
-  );
-  const opacity = useTransform(
-    progress,
-    [index * seg - 0.02, index * seg + 0.02, (index + 1) * seg - 0.02, (index + 1) * seg + 0.02],
-    [0.3, 1, 1, 0.3],
-  );
+  const tickRange = [
+    clamp01(index * seg - 0.02),
+    clamp01(index * seg + 0.02),
+    clamp01((index + 1) * seg - 0.02),
+    clamp01((index + 1) * seg + 0.02),
+  ];
+  const width = useTransform(progress, tickRange, [10, 54, 54, 10]);
+  const opacity = useTransform(progress, tickRange, [0.3, 1, 1, 0.3]);
   return <motion.span className="h-px bg-gold" style={{ width, opacity }} />;
 }
 
@@ -82,20 +82,28 @@ function Slide({
   group: (typeof chapters)[number];
   index: number;
   total: number;
-  progress: ReturnType<typeof useSpring>;
+  progress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
   const seg = 1 / total;
   const start = index * seg;
   const end = start + seg;
   const pad = seg * 0.16;
 
-  const range = [start - pad, start + pad * 0.6, end - pad * 0.6, end + pad];
+  const range = [
+    clamp01(start - pad),
+    clamp01(start + pad * 0.6),
+    clamp01(end - pad * 0.6),
+    clamp01(end + pad),
+  ];
+  const textRange = [
+    clamp01(start - pad * 0.2),
+    clamp01(start + pad * 0.45),
+    clamp01(end - pad * 0.9),
+    clamp01(end - pad * 0.25),
+  ];
+
   const opacity = useTransform(progress, range, [0, 1, 1, 0]);
-  const textOpacity = useTransform(
-    progress,
-    [start - pad * 0.2, start + pad * 0.45, end - pad * 0.9, end - pad * 0.25],
-    [0, 1, 1, 0],
-  );
+  const textOpacity = useTransform(progress, textRange, [0, 1, 1, 0]);
   const imgY = useTransform(progress, range, ["26%", "0%", "0%", "-26%"]);
   const imgScale = useTransform(progress, range, [0.72, 1, 1.08, 1.3]);
   const imgRotate = useTransform(progress, range, [10, 0, -2, -12]);

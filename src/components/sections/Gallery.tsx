@@ -32,7 +32,7 @@ export function Gallery() {
         </Reveal>
 
         <motion.div
-          style={{ y }}
+          style={{ y, willChange: "transform" }}
           className="mt-12 grid auto-rows-[190px] grid-cols-2 gap-3 md:grid-cols-4 md:auto-rows-[230px]"
         >
           {tiles.map((t, i) => (

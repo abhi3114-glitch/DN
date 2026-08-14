@@ -11,7 +11,7 @@ const chapters = featured.map((id) => groups.find((g) => g.id === id)!);
 export function Signature() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = scrollYProgress;
+  const p = useSpring(scrollYProgress, { stiffness: 220, damping: 30, mass: 0.15 });
   const n = chapters.length;
 
   return (
@@ -59,7 +59,7 @@ function Tick({
 }: {
   index: number;
   total: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  progress: ReturnType<typeof useSpring>;
 }) {
   const seg = 1 / total;
   const tickRange = [
@@ -70,7 +70,7 @@ function Tick({
   ];
   const width = useTransform(progress, tickRange, [10, 54, 54, 10]);
   const opacity = useTransform(progress, tickRange, [0.3, 1, 1, 0.3]);
-  return <motion.span className="h-px bg-gold" style={{ width, opacity }} />;
+  return <motion.span className="h-px bg-gold" style={{ width, opacity, willChange: "width, opacity" }} />;
 }
 
 function Slide({
@@ -82,7 +82,7 @@ function Slide({
   group: (typeof chapters)[number];
   index: number;
   total: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  progress: ReturnType<typeof useSpring>;
 }) {
   const seg = 1 / total;
   const start = index * seg;
@@ -113,32 +113,33 @@ function Slide({
   return (
     <motion.div
       className="absolute inset-0 grid place-items-center px-5 md:px-10"
-      style={{ opacity, pointerEvents: "none" }}
+      style={{ opacity, pointerEvents: "none", willChange: "opacity" }}
     >
       <motion.span
         className="display pointer-events-none absolute right-[2%] top-[12%] text-[38vw] leading-none text-cream/[0.05] md:text-[26vw]"
-        style={{ x: numX }}
+        style={{ x: numX, willChange: "transform" }}
       >
         0{index + 1}
       </motion.span>
 
       <div className="relative grid w-full max-w-[1500px] items-center gap-6 md:grid-cols-[1.05fr_1fr]">
-        <motion.div className="relative grid place-items-center" style={{ y: imgY }}>
+        <motion.div className="relative grid place-items-center" style={{ y: imgY, willChange: "transform" }}>
           <div
             aria-hidden
-            className="absolute h-[58%] w-[58%] rounded-full blur-3xl"
+            className="absolute h-[58%] w-[58%] rounded-full blur-2xl opacity-70"
             style={{ background: "color-mix(in oklab, var(--gold) 32%, transparent)" }}
           />
           <motion.img
             src={group.image}
             alt={group.title}
             loading="lazy"
-            className="relative w-[62vw] max-w-[560px] drop-shadow-2xl md:w-[34vw]"
-            style={{ scale: imgScale, rotate: imgRotate }}
+            decoding="async"
+            className="relative w-[62vw] max-w-[560px] drop-shadow-xl md:w-[34vw]"
+            style={{ scale: imgScale, rotate: imgRotate, willChange: "transform" }}
           />
         </motion.div>
 
-        <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-10 -mt-8 md:mt-0">
+        <motion.div style={{ y: textY, opacity: textOpacity, willChange: "transform, opacity" }} className="relative z-10 -mt-8 md:mt-0">
           <p className="eyebrow text-gold">{group.kicker ?? "Signature"}</p>
           <h3 className="display mt-3 text-[15vw] leading-[0.82] text-cream md:text-[6.4vw]">
             {group.title}

@@ -72,20 +72,20 @@ export function Hero() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 110, damping: 26, mass: 0.35 });
+  // Direct scroll mapping gives immediate 60fps response without spring physics lag
+  const p = scrollYProgress;
 
   // camera pushes into the dessert
-  const plateScale = useTransform(p, [0, 0.55, 1], [1, 1.9, 2.8]);
+  const plateScale = useTransform(p, [0, 0.55, 1], [1, 1.85, 2.7]);
   const plateY = useTransform(p, [0, 1], ["0%", "-16%"]);
-  const plateRotate = useTransform(p, [0, 1], [0, -9]);
-  const plateRotateX = useTransform(p, [0, 1], [0, 16]);
+  const plateRotate = useTransform(p, [0, 1], [0, -7]);
 
   const titleY = useTransform(p, [0, 1], ["0%", "-90%"]);
   const titleTrack = useTransform(p, [0, 1], ["-0.03em", "0.14em"]);
   const nationY = useTransform(p, [0, 1], ["0%", "70%"]);
   const copyFade = useTransform(p, [0, 0.3], [1, 0]);
-  const glowScale = useTransform(p, [0, 1], [1, 1.7]);
-  const particleDepth = useTransform(p, [0, 1], [0, -220]);
+  const glowScale = useTransform(p, [0, 1], [1, 1.6]);
+  const particleDepth = useTransform(p, [0, 1], [0, -200]);
 
   // signature chocolate wipe that closes the scene
   const wipe = useTransform(p, [0.45, 1], ["130%", "0%"]);
@@ -107,7 +107,6 @@ export function Hero() {
     <section ref={ref} className="relative h-[260svh]">
       <div
         className="sticky top-0 grid h-[100svh] place-items-center overflow-hidden grain"
-        style={{ perspective: "1500px" }}
       >
         {/* dynamic warm light */}
         <motion.div
@@ -115,10 +114,11 @@ export function Hero() {
           className="pointer-events-none absolute inset-0"
           style={{
             scale: glowScale,
-            x: tilt.x * 60,
-            y: tilt.y * 40,
+            x: tilt.x * 50,
+            y: tilt.y * 30,
             background:
               "radial-gradient(60% 48% at 50% 44%, color-mix(in oklab, var(--gold) 34%, transparent), transparent 72%)",
+            willChange: "transform",
           }}
         />
         <div
@@ -138,21 +138,21 @@ export function Hero() {
           alt=""
           aria-hidden
           className="absolute left-[3%] top-[18%] w-28 animate-float-soft opacity-90 md:w-52"
-          style={{ x: tilt.x * -110, y: tilt.y * -70, rotate: tilt.x * 12, scale: glowScale }}
+          style={{ x: tilt.x * -110, y: tilt.y * -70, rotate: tilt.x * 12, scale: glowScale, willChange: "transform" }}
         />
         <motion.img
           src={shake}
           alt=""
           aria-hidden
           className="absolute right-[4%] top-[12%] w-20 animate-float-soft opacity-90 md:w-40 [animation-delay:1.2s]"
-          style={{ x: tilt.x * 130, y: tilt.y * 90, rotate: tilt.x * -12 }}
+          style={{ x: tilt.x * 130, y: tilt.y * 90, rotate: tilt.x * -12, willChange: "transform" }}
         />
         <motion.img
           src={icecream}
           alt=""
           aria-hidden
           className="absolute bottom-[12%] left-[9%] hidden w-28 animate-float-soft opacity-90 md:block [animation-delay:2.4s]"
-          style={{ x: tilt.x * -150, y: tilt.y * 60 }}
+          style={{ x: tilt.x * -150, y: tilt.y * 60, willChange: "transform" }}
         />
 
         <div className="relative w-full pt-16 md:pt-20">
@@ -168,7 +168,7 @@ export function Hero() {
             </motion.p>
 
             <motion.h1
-              style={{ y: titleY, letterSpacing: titleTrack }}
+              style={{ y: titleY, letterSpacing: titleTrack, willChange: "transform" }}
               className="display mt-3 text-[21vw] leading-[0.78] text-espresso md:text-[13vw]"
             >
               {"DESSERT".split("").map((c, i) => (
@@ -192,8 +192,7 @@ export function Hero() {
                   y: plateY,
                   scale: plateScale,
                   rotate: plateRotate,
-                  rotateX: plateRotateX,
-                  transformStyle: "preserve-3d",
+                  willChange: "transform",
                 }}
                 initial={{ opacity: 0, scale: 0.84, y: 70 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -212,7 +211,7 @@ export function Hero() {
                   src={drizzle}
                   alt=""
                   aria-hidden
-                  className="absolute -left-[12%] bottom-[-6%] w-[54%] opacity-90 mix-blend-multiply"
+                  className="absolute -left-[12%] bottom-[-6%] w-[54%] opacity-85"
                   style={{ x: tilt.x * -34, y: tilt.y * -18, rotate: tilt.x * -6 }}
                 />
                 <motion.img
@@ -220,24 +219,24 @@ export function Hero() {
                   alt="Belgian waffle stack with molten chocolate"
                   fetchPriority="high"
                   className="relative w-full drop-shadow-2xl"
-                  style={{ x: tilt.x * 26, y: tilt.y * 18, rotateY: tilt.x * 14, rotateX: tilt.y * -10 }}
+                  style={{ x: tilt.x * 26, y: tilt.y * 18 }}
                 />
                 {/* specular sheen */}
                 <motion.div
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+                  className="pointer-events-none absolute inset-0 opacity-70"
                   style={{
                     x: tilt.x * 90,
                     y: tilt.y * 60,
                     background:
-                      "radial-gradient(38% 32% at 40% 28%, rgba(255,255,255,0.75), transparent 70%)",
+                      "radial-gradient(38% 32% at 40% 28%, rgba(255,255,255,0.4), transparent 70%)",
                   }}
                 />
               </motion.div>
 
               <motion.h2
                 className="display relative z-20 -mt-[9vw] text-[21vw] leading-[0.78] text-espresso md:-mt-[7vw] md:text-[13vw]"
-                style={{ y: nationY, letterSpacing: titleTrack }}
+                style={{ y: nationY, letterSpacing: titleTrack, willChange: "transform" }}
               >
                 {"NATION".split("").map((c, i) => (
                   <span key={i} className="inline-block overflow-hidden align-bottom">

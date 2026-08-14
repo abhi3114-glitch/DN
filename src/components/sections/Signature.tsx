@@ -11,7 +11,7 @@ const chapters = featured.map((id) => groups.find((g) => g.id === id)!);
 export function Signature() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.35 });
+  const p = scrollYProgress;
   const n = chapters.length;
 
   return (

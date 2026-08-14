@@ -36,11 +36,7 @@ export function Categories() {
   }, []);
 
   const { scrollYProgress } = useScroll({ target: section, offset: ["start start", "end end"] });
-  const x = useSpring(useTransform(scrollYProgress, [0, 1], [0, -overflow]), {
-    stiffness: 120,
-    damping: 30,
-    mass: 0.4,
-  });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -overflow]);
 
   return (
     <section

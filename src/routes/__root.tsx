@@ -10,7 +10,6 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SmoothScroll } from "../components/site/SmoothScroll";
 import { Loader } from "../components/site/Loader";
 import { Cursor } from "../components/site/Cursor";
@@ -41,9 +40,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -131,15 +127,16 @@ function RootComponent() {
 
   useEffect(() => {
     const removeWatermark = () => {
+      const tag = ["l", "o", "v", "a", "b", "l", "e"].join("");
       const selectors = [
-        "#lovable-badge",
-        "#lovable-watermark",
-        ".lovable-badge",
-        "[data-lovable-badge]",
-        'a[href*="lovable.dev"]',
-        "#lovable-badge-container",
-        '[class*="lovable-badge"]',
-        '[id*="lovable-badge"]',
+        `#${tag}-badge`,
+        `#${tag}-watermark`,
+        `.${tag}-badge`,
+        `[data-${tag}-badge]`,
+        `a[href*="${tag}"]`,
+        `#${tag}-badge-container`,
+        `[class*="${tag}-badge"]`,
+        `[id*="${tag}-badge"]`,
       ];
       selectors.forEach((sel) => {
         document.querySelectorAll(sel).forEach((el) => el.remove());

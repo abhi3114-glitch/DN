@@ -1,0 +1,278 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-choco: var(--choco);
+  --color-espresso: var(--espresso);
+  --color-cocoa: var(--cocoa);
+  --color-caramel: var(--caramel);
+  --color-gold: var(--gold);
+  --color-berry: var(--berry);
+  --color-pistachio: var(--pistachio);
+
+  --font-display: "Bodoni Moda", Georgia, serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Playfair Display", Georgia, serif;
+}
+
+:root {
+  --radius: 0.25rem;
+
+  --cream: oklch(0.968 0.018 88);
+  --paper: oklch(0.985 0.008 90);
+  --choco: oklch(0.253 0.058 45);
+  --espresso: oklch(0.168 0.04 45);
+  --cocoa: oklch(0.395 0.083 47);
+  --caramel: oklch(0.686 0.12 62);
+  --gold: oklch(0.79 0.109 78);
+  --berry: oklch(0.53 0.196 25);
+  --pistachio: oklch(0.66 0.11 140);
+
+  --background: var(--cream);
+  --foreground: var(--espresso);
+  --card: var(--paper);
+  --card-foreground: var(--espresso);
+  --popover: var(--paper);
+  --popover-foreground: var(--espresso);
+  --primary: var(--choco);
+  --primary-foreground: var(--cream);
+  --secondary: oklch(0.93 0.022 85);
+  --secondary-foreground: var(--espresso);
+  --muted: oklch(0.93 0.022 85);
+  --muted-foreground: oklch(0.5 0.04 55);
+  --accent: var(--caramel);
+  --accent-foreground: var(--espresso);
+  --destructive: var(--berry);
+  --destructive-foreground: var(--cream);
+  --border: oklch(0.87 0.03 78);
+  --input: oklch(0.87 0.03 78);
+  --ring: var(--caramel);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--gold);
+    color: var(--espresso);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+}
+
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+}
+
+@utility eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@utility dark-zone {
+  background-color: var(--espresso);
+  color: var(--cream);
+  --border: oklch(1 0 0 / 12%);
+}
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@utility edge-line {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in oklab, var(--caramel) 60%, transparent),
+    transparent
+  );
+  height: 1px;
+}
+
+@keyframes drip {
+  0% {
+    transform: translateY(-100%) scaleY(0.4);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(140%) scaleY(1);
+    opacity: 0;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(2deg);
+  }
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(120%) rotate(4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+@utility animate-float-soft {
+  animation: float-soft 7s ease-in-out infinite;
+}
+
+@utility animate-marquee {
+  animation: marquee-x 28s linear infinite;
+}
+
+@utility drip-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background-repeat: repeat-x;
+  background-size: 220px 90px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='90' viewBox='0 0 220 90'%3E%3Cpath fill='%23241206' d='M0 0h220v26c-12 0-14 22-24 22s-12-16-22-16-10 30-22 30-12-30-24-30-12 18-24 18-12-26-26-26-14 24-26 24-14-20-26-20-14 10-26 10z'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.no-native-cursor,
+.no-native-cursor * {
+  cursor: none !important;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Watermark & Branding Removal */
+#lovable-badge,
+#lovable-watermark,
+.lovable-badge,
+[data-lovable-badge],
+a[href*="lovable.dev"],
+#lovable-badge-container,
+[class*="lovable-badge"],
+[id*="lovable-badge"],
+iframe[src*="lovable.dev"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+}
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px), (pointer: coarse) {
+  /* Disable SVG feTurbulence grain rasterization on mobile touch viewports to fix GPU scroll lag */
+  .grain::after {
+    display: none !important;
+  }
+
+  /* Hardware accelerate sticky and scroll containers on mobile */
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Disable heavy backdrop blurs on mobile to prevent full viewport re-paints */
+  .backdrop-blur-md,
+  .backdrop-blur-sm,
+  .backdrop-blur {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
